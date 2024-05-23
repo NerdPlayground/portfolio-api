@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
-    'profiles',
+    'profiles.apps.ProfilesConfig',
 ]
 
 MIDDLEWARE = [
