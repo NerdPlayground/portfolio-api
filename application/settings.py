@@ -151,15 +151,26 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
+
+# DJ-REST-AUTH SETTINGS
+
 REST_AUTH = {
     'OLD_PASSWORD_FIELD_ENABLED': True, # old password is required during password change
     'LOGOUT_ON_PASSWORD_CHANGE': True, # forcefully logged out after password change
 }
 
-
-# Authentication and Authorization
-
 SITE_ID = 1
+
+
+# ALLAUTH SETTINGS
+
+AUTHENTICATION_BACKENDS = [
+   'django.contrib.auth.backends.ModelBackend', # Needed to login by username in Django admin, regardless of `allauth`
+   'allauth.account.auth_backends.AuthenticationBackend', # `allauth` specific authentication methods, such as login by email
+]
+
+
+# Email Configuration
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
