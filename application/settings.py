@@ -38,9 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_spectacular',
     'corsheaders',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'profiles.apps.ProfilesConfig',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'application.urls'
@@ -132,17 +141,50 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Application Schema and Documentation
+# RESTFRAMEWORK SETTINGS
 
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES" : [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+
+# DJ-REST-AUTH SETTINGS
+
+REST_AUTH = {
+    'OLD_PASSWORD_FIELD_ENABLED': True, # old password is required during password change
+    'LOGOUT_ON_PASSWORD_CHANGE': True, # forcefully logged out after password change
+}
+
+SITE_ID = 1
+
+
+# ALLAUTH SETTINGS
+
+AUTHENTICATION_BACKENDS = [
+   'django.contrib.auth.backends.ModelBackend', # Needed to login by username in Django admin, regardless of `allauth`
+   'allauth.account.auth_backends.AuthenticationBackend', # `allauth` specific authentication methods, such as login by email
+]
+
+
+# Email Configuration
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+# Application Schema and Documentation
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Personal Portfolio API",
     "DESCRIPTION": "Interface for both the portfolio and portfolio manager",
     "VERSION": "1.0.0",
 }
+
+
+# External API Interaction
 
 CORS_ALLOWED_ORIGINS = []
 
