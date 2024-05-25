@@ -76,7 +76,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.request',
             ],
         },
     },
@@ -150,6 +149,11 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+REST_AUTH = {
+    'OLD_PASSWORD_FIELD_ENABLED': True, # old password is required during password change
+    'LOGOUT_ON_PASSWORD_CHANGE': True, # forcefully logged out after password change
 }
 
 
