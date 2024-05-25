@@ -25,4 +25,6 @@ urlpatterns = [
     # /user, /login, /logout, /password/change, /password/reset/, /password/reset/confirm/
     path("api/v1/dj-rest-auth/", include("dj_rest_auth.urls")),
     path("api/v1/dj-rest-auth/registration/",include("dj_rest_auth.registration.urls")),
+    path("users/",include("profiles.urls")),
+    # path("",include(".urls")),
 ]
