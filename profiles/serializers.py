@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=get_user_model()
-        fields=['id','username','first_name','last_name','email','profile']
+        fields=['username','first_name','last_name','email','profile']
     
     def update(self,instance,validated_data):
         profile=Profile.objects.get(user=instance)
