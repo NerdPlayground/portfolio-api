@@ -22,6 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    # password/reset, password/reset/confirm, password/reset/validate_token
+    path("api/v1/dj-rest-auth/password/reset/", include('django_rest_passwordreset.urls', namespace='password_reset')),
     # /user, /login, /logout, /password/change, /password/reset/, /password/reset/confirm/
     path("api/v1/dj-rest-auth/", include("dj_rest_auth.urls")),
     path("api/v1/dj-rest-auth/registration/",include("dj_rest_auth.registration.urls")),

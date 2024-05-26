@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_rest_passwordreset',
     'profiles.apps.ProfilesConfig',
 ]
 
