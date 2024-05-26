@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.urls.conf import re_path
+from allauth.account.views import ConfirmEmailView
 from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
 
 urlpatterns = [
@@ -26,6 +28,9 @@ urlpatterns = [
     path("api/v1/dj-rest-auth/password/reset/", include('django_rest_passwordreset.urls', namespace='password_reset')),
     # /user, /login, /logout, /password/change, /password/reset/, /password/reset/confirm/
     path("api/v1/dj-rest-auth/", include("dj_rest_auth.urls")),
+    # account-confirm-email/
+    re_path('api/v1/dj-rest-auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(),name='account_confirm_email'),
+    # verify-email/ resend-email/ account-email-verification-sent/
     path("api/v1/dj-rest-auth/registration/",include("dj_rest_auth.registration.urls")),
     path("users/",include("profiles.urls")),
     # path("",include(".urls")),
