@@ -10,6 +10,7 @@ class UserList(generics.ListAPIView):
     permission_classes=[permissions.IsAdminUser]
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field='username'
     queryset=get_user_model().objects.all()
     serializer_class=UserSerializer
     permission_classes=[isUserOrReadOnly]

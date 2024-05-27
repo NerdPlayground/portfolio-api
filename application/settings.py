@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_rest_passwordreset',
     'profiles.apps.ProfilesConfig',
+    'pocket',
 ]
 
 MIDDLEWARE = [
@@ -170,9 +172,18 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+# Authentication and Verification
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'rest_user_details'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'rest_login'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+
 # Email Configuration
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Application Schema and Documentation
