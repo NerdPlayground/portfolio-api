@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',
     'profiles.apps.ProfilesConfig',
     'pocket',
+    'projects',
 ]
 
 MIDDLEWARE = [
