@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'django_rest_passwordreset',
     'profiles.apps.ProfilesConfig',
+    'pocket',
 ]
 
 MIDDLEWARE = [
