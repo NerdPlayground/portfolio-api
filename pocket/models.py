@@ -1,6 +1,12 @@
+import uuid
 from django.db import models
 
 class Achievement(models.Model):
+    id=models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     link=models.URLField(null=True,blank=True)
     start_date=models.DateField(null=True,blank=True)
     end_date=models.DateField(null=True,blank=True)
