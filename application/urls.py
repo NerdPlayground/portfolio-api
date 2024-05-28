@@ -33,5 +33,6 @@ urlpatterns = [
     # verify-email/ resend-email/ account-email-verification-sent/
     path("api/v1/dj-rest-auth/registration/",include("dj_rest_auth.registration.urls")),
     path("users/",include("profiles.urls")),
+    path("projects/",include("projects.urls")),
     # path("",include(".urls")),
 ]
