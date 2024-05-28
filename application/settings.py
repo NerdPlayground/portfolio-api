@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'profiles.apps.ProfilesConfig',
     'pocket',
     'projects',
+    'experiences',
 ]
 
 MIDDLEWARE = [
