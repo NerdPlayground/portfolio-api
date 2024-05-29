@@ -1,0 +1,13 @@
+[run]
+source=<comma- or newline-separated list of directories or importable names (packages or modules)>
+omit=
+    venv
+    tests.py
+    */test/*
+    */migrations/*
+    */__init__.py
+
+[report]
+skip_covered=True
+skip_empty=True
+sort=miss
