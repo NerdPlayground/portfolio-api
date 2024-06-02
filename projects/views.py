@@ -4,10 +4,17 @@ from .serializers import ProjectSerializer
 from rest_framework import generics,permissions
 from profiles.permissions import isOwnerOrReadOnly
 
-class ProjectsList(generics.ListCreateAPIView):
+class Projects(generics.ListAPIView):
     queryset=Project.objects.all()
     serializer_class=ProjectSerializer
+    permission_classes=[permissions.IsAdminUser]
+
+class ProjectsList(generics.ListCreateAPIView):
+    serializer_class=ProjectSerializer
     permission_classes=[permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Project.objects.filter(user=self.request.user)
 
     def perform_create(self,serializer):
         ongoing,end_date=project_status(self.request)

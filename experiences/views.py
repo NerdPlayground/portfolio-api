@@ -4,10 +4,17 @@ from .serializers import ExperienceSerializer
 from rest_framework import generics,permissions
 from profiles.permissions import isUserOrReadOnly
 
-class ExperienceList(generics.ListCreateAPIView):
+class Experiences(generics.ListAPIView):
     queryset=Experience.objects.all()
     serializer_class=ExperienceSerializer
+    permissions_classes=[permissions.IsAdminUser]
+
+class ExperienceList(generics.ListCreateAPIView):
+    serializer_class=ExperienceSerializer
     permissions_classes=[permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Experience.objects.filter(user=self.request.user)
 
     def perform_create(self,serializer):
         ongoing,end_date=project_status(self.request)
