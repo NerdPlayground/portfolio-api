@@ -24,13 +24,3 @@ class PocketTestCase(TestCase):
     def get_current_user(self):
         response=self.client.get(reverse("rest_user_details"))
         return response
-    
-    def project_data(self):
-        print("name:",self.member_project.name)
-        print("link:",self.member_project.link)
-        print("start_date:",self.member_project.start_date)
-        print("end_date:",self.member_project.end_date)
-        print("ongoing:",self.member_project.ongoing)
-        print("description:",self.member_project.description)
-        print("objectives:",self.member_project.objectives)
-        print("tools:",self.member_project.tools)
