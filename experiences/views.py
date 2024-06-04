@@ -7,11 +7,11 @@ from profiles.permissions import isUserOrReadOnly
 class Experiences(generics.ListAPIView):
     queryset=Experience.objects.all()
     serializer_class=ExperienceSerializer
-    permissions_classes=[permissions.IsAdminUser]
+    permission_classes=[permissions.IsAdminUser]
 
 class ExperienceList(generics.ListCreateAPIView):
     serializer_class=ExperienceSerializer
-    permissions_classes=[permissions.IsAuthenticated]
+    permission_classes=[permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Experience.objects.filter(user=self.request.user)
@@ -26,7 +26,7 @@ class ExperienceList(generics.ListCreateAPIView):
 class ExperienceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset=Experience.objects.all()
     serializer_class=ExperienceSerializer
-    permissions_classes=[permissions.IsAuthenticated,isUserOrReadOnly]
+    permission_classes=[permissions.IsAuthenticated,isUserOrReadOnly]
 
     def perform_update(self,serializer):
         ongoing,end_date=project_status(self.request)
