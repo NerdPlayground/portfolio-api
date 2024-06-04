@@ -2,12 +2,19 @@ from .models import Experience
 from pocket.views import project_status
 from .serializers import ExperienceSerializer
 from rest_framework import generics,permissions
-from profiles.permissions import isUserOrReadOnly
+from profiles.permissions import isOwnerOrReadOnly
 
-class ExperienceList(generics.ListCreateAPIView):
+class Experiences(generics.ListAPIView):
     queryset=Experience.objects.all()
     serializer_class=ExperienceSerializer
-    permissions_classes=[permissions.IsAuthenticated]
+    permission_classes=[permissions.IsAdminUser]
+
+class ExperienceList(generics.ListCreateAPIView):
+    serializer_class=ExperienceSerializer
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Experience.objects.filter(user=self.request.user)
 
     def perform_create(self,serializer):
         ongoing,end_date=project_status(self.request)
@@ -19,7 +26,7 @@ class ExperienceList(generics.ListCreateAPIView):
 class ExperienceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset=Experience.objects.all()
     serializer_class=ExperienceSerializer
-    permissions_classes=[permissions.IsAuthenticated,isUserOrReadOnly]
+    permission_classes=[permissions.IsAuthenticated,isOwnerOrReadOnly]
 
     def perform_update(self,serializer):
         ongoing,end_date=project_status(self.request)
