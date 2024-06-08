@@ -194,10 +194,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application Schema and Documentation
 
+VERSION="1.0.0"
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "Personal Portfolio API",
     "DESCRIPTION": "Interface for both the portfolio and portfolio manager",
-    "VERSION": "1.0.0",
+    "VERSION": VERSION,
 }
 
 
