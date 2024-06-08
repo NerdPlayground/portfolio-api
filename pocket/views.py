@@ -5,8 +5,8 @@ def get_date_object(date_string):
     return datetime.strptime(date_string,date_format).date()
 
 def project_status(request):
-    end_date=request.data.get('end_date')
-    if end_date=='': return (True,None)
+    ongoing=request.data.get('ongoing')
+    if ongoing: return (True,None)
     today=date.today()
-    datestamp=get_date_object(end_date)
-    return (True,None) if datestamp>today else (False,end_date)
+    end_date=get_date_object(request.data.get('end_date'))
+    return (True,None) if end_date>today else (False,end_date)
