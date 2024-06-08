@@ -10,11 +10,17 @@ class UserList(generics.ListAPIView):
     serializer_class=UserSerializer
     permission_classes=[permissions.IsAdminUser]
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserDetail(generics.RetrieveAPIView):
     lookup_field='username'
     queryset=get_user_model().objects.all()
     serializer_class=UserSerializer
-    permission_classes=[isUserOrReadOnly]
+
+class CurrentUser(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class=UserSerializer
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
 
 class LoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)

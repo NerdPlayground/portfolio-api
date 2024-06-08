@@ -18,6 +18,7 @@ from decouple import config
 from django.contrib import admin
 from django.urls import path,include
 from django.urls.conf import re_path
+from profiles.views import CurrentUser
 from allauth.account.views import ConfirmEmailView
 from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
 
@@ -36,6 +37,7 @@ urlpatterns = [
     re_path('api/v1/dj-rest-auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(),name='account_confirm_email'),
     # verify-email/ resend-email/ account-email-verification-sent/
     path("api/v1/dj-rest-auth/registration/",include("dj_rest_auth.registration.urls")),
+    path("user/",CurrentUser.as_view(),name="current-user"),
     path("users/",include("profiles.urls")),
     path("projects/",include("projects.urls")),
     path("experiences/",include("experiences.urls")),
