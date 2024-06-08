@@ -5,13 +5,14 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model=Project
         fields=[
-            "id","name","user","link","start_date","end_date",
-            "ongoing","description","objectives","tools"
+            "id","name","user","link","display","start_date",
+            "end_date","ongoing","description","objectives","tools"
         ]
         read_only_fields=["user"]
         extra_kwargs={
             "name":{"required":True},
             "link":{"required":True},
+            "display":{"required":True},
             "start_date":{"required":True},
             "description":{"required":True},
             "objectives":{"required":True},

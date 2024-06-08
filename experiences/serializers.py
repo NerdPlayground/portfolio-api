@@ -5,7 +5,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model=Experience
         fields=[
-            "id","company","title","user","link","start_date",
+            "id","company","title","user","link","display","start_date",
             "end_date","ongoing","description","objectives","tools"
         ]
         read_only_fields=["user"]
@@ -13,6 +13,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
             "company":{"required":True},
             "title":{"required":True},
             "link":{"required":True},
+            "display":{"required":True},
             "start_date":{"required":True},
             "description":{"required":True},
             "objectives":{"required":True},

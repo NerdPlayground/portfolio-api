@@ -7,6 +7,7 @@ class Achievement(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    display=models.BooleanField(default=False,blank=True)
     link=models.URLField(null=True,blank=True)
     start_date=models.DateField(null=True,blank=True)
     end_date=models.DateField(null=True,blank=True)
