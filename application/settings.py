@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_framework',
+    'knox',
     'rest_framework.authtoken',
     'drf_spectacular',
     'corsheaders',
@@ -72,7 +74,9 @@ ROOT_URLCONF = 'application.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR/'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,11 +152,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # RESTFRAMEWORK SETTINGS
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES" : [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES" : ["knox.auth.TokenAuthentication",],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+
+# KNOX SETTINGS
+
+REST_KNOX = {
+    "TOKEN_TTL" : timedelta(days=1),
+    "AUTH_HEADER_PREFIX": "Bearer",
 }
 
 
@@ -178,6 +187,7 @@ AUTHENTICATION_BACKENDS = [
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_ADAPTER = 'pocket.views.PortfolioAPIAccountAdapter'
 
 
 # Email Configuration
@@ -187,10 +197,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application Schema and Documentation
 
+VERSION="1.0.0"
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "Personal Portfolio API",
     "DESCRIPTION": "Interface for both the portfolio and portfolio manager",
-    "VERSION": "1.0.0",
+    "VERSION": VERSION,
 }
 
 
