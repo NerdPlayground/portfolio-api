@@ -192,7 +192,12 @@ ACCOUNT_ADAPTER = 'pocket.views.PortfolioAPIAccountAdapter'
 
 # Email Configuration
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
+DEFAULT_FROM_EMAIL = "studytime023@gmail.com"
+ANYMAIL = {
+    "MAILJET_API_KEY":config("MAILJET_API_KEY"),
+    "MAILJET_SECRET_KEY":config("MAILJET_SECRET_KEY"),
+}
 
 
 # Application Schema and Documentation
