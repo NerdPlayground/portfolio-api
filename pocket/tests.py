@@ -19,13 +19,16 @@ class PocketTestCase(TestCase):
 
     def member_login(self,member,password=None):
         password=password or self.password
-        response=self.client.post(reverse("rest_login"),{
+        response=self.client.post(reverse("knox_login"),{
             "password":password,
-            "email":member.user.email,
+            "username":member.user.username,
         })
         self.assertEqual(response.status_code,200)
-        return response.json()
+        return response.json().get("token")
 
-    def get_current_user(self):
-        response=self.client.get(reverse("rest_user_details"))
+    def get_current_user(self,token):
+        response=self.client.get(
+            path=reverse("current-user"),
+            headers={"Authorization": f"Bearer {token}"},
+        )
         return response

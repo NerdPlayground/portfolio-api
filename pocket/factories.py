@@ -6,6 +6,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
         abstract=True
     
     ongoing=False
+    display=factory.Faker("random_element",elements=[True,False])
     start_date=factory.Faker("date_between_dates",date_start=date(2020,1,1),date_end=date(2024,1,1))
     end_date=factory.Faker("date_between_dates",date_start=factory.SelfAttribute('..start_date'),date_end=date(2024,1,1))
     description=factory.Faker("paragraph",nb_sentences=5)
