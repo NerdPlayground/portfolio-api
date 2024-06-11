@@ -9,7 +9,7 @@ from allauth.account.models import EmailAddress
 
 '''
 TESTED ENDPOINTS:
-- login and logout
+- login, logout and logout all
 - register user
 - verify user email
 - change user details
@@ -18,6 +18,7 @@ TESTED ENDPOINTS:
 - reset password
 - admin access all users
 - member access all users
+- access single member details
 
 UNTESTED ENDPOINTS:
 '''
@@ -100,6 +101,9 @@ class ProfilesTestCase(PocketTestCase):
         self.assertEqual(response.status_code,204)
         self.assertEqual(Profile.objects.count(),total_members-1)
 
+        user_response=self.get_current_user(token)
+        self.assertEqual(user_response.status_code,401)
+
     def test_member_change_password(self):
         token=self.member_login(self.member)
         password="QWERTY23!@#"
@@ -169,6 +173,25 @@ class ProfilesTestCase(PocketTestCase):
         user_response=self.get_current_user(token)
         self.assertEqual(user_response.status_code,401)
     
+    def test_member_logout_all_sessions(self):
+        token_counter=AuthToken.objects.filter(user=self.member.user).count()
+        all_tokens=AuthToken.objects.count()
+        token=self.member_login(self.member)
+        self.assertEqual(AuthToken.objects.count(),token_counter+1)
+
+        user_response=self.get_current_user(token)
+        self.assertEqual(user_response.status_code,200)
+
+        response=self.client.post(
+            path=reverse("knox_logout_all"),
+            headers={"Authorization":f"Bearer {token}"},
+        )
+        self.assertEqual(response.status_code,204)
+        self.assertEqual(AuthToken.objects.count(),all_tokens-token_counter)
+
+        user_response=self.get_current_user(token)
+        self.assertEqual(user_response.status_code,401)
+    
     def test_admin_access_all_users(self):
         token=self.member_login(self.admin)
         profile_count=Profile.objects.count()
@@ -186,3 +209,12 @@ class ProfilesTestCase(PocketTestCase):
             headers={"Authorization":f"Bearer {token}"},
         )
         self.assertEqual(response.status_code,403)
+    
+    def test_member_search_for_user(self):
+        token=self.member_login(self.member)
+        response=self.client.get(
+            path=reverse("user-detail",kwargs={"username":self.other_member.user.username}),
+            headers={"Authorization":f"Bearer {token}"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code,200)
