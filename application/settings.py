@@ -27,7 +27,10 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production! 
 DEBUG = config('DEBUG',True,cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'portfolio-api-vwdg.onrender.com',
+]
 
 
 # Application definition
@@ -237,6 +240,10 @@ SPECTACULAR_SETTINGS = {
 
 # External API Interaction
 
-CORS_ALLOWED_ORIGINS = []
+CORS_ALLOWED_ORIGINS = [
+    "https://portfolio-api-vwdg.onrender.com",
+]
 
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = [
+    "https://portfolio-api-vwdg.onrender.com",
+]
