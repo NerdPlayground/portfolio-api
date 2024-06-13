@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+	'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'application.urls'
@@ -95,16 +96,31 @@ WSGI_APPLICATION = 'application.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config("NAME"),
-        'USER': config("USER"),
-        'PASSWORD': config("PASSWORD"),
-        'HOST': config("HOST"),
-        'PORT': config("PORT"),
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config("NAME"),
+            'USER': config("USER"),
+            'PASSWORD': config("PASSWORD"),
+            'HOST': config("HOST"),
+            'PORT': config("PORT"),
+        }
     }
-}
+else:
+    # Update database configuration from $DATABASE_URL.
+    import dj_database_url
+
+    # conn_max_age makes the connection persistent rather
+    # than recreating it every request cycle
+    DATABASES = {
+        'default': {dj_database_url.config(
+            config("DATABASE_URL"),
+            conn_max_age=500,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )}
+    }
 
 
 # Password validation
@@ -142,6 +158,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT= BASE_DIR/'staticfiles'
+
+STATICFILES_DIRS= [BASE_DIR/'static']
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -193,7 +216,9 @@ ACCOUNT_ADAPTER = 'pocket.views.PortfolioAPIAccountAdapter'
 # Email Configuration
 
 EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
-DEFAULT_FROM_EMAIL = "studytime023@gmail.com"
+
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+
 ANYMAIL = {
     "MAILJET_API_KEY":config("MAILJET_API_KEY"),
     "MAILJET_SECRET_KEY":config("MAILJET_SECRET_KEY"),
