@@ -117,7 +117,7 @@ else:
     # conn_max_age makes the connection persistent rather
     # than recreating it every request cycle
     DATABASES = {
-        'default': dj_database_url.config(
+        'default': dj_database_url.parse(
             config("DATABASE_URL"),
             conn_max_age=600,
             conn_health_checks=True,
