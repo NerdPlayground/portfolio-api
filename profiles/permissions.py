@@ -7,11 +7,3 @@ class isOwnerOrReadOnly(permissions.BasePermission):
 
         # Write permissions to object owners
         return obj.user==request.user
-
-class isUserOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self,request,view,obj):
-        # Read permissions to any request
-        if request.method in permissions.SAFE_METHODS: return True
-
-        # Write permissions to object owners
-        return obj==request.user
