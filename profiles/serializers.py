@@ -2,6 +2,10 @@ from rest_framework import serializers
 from .models import Profile
 from django.contrib.auth import get_user_model
 
+class LoginSerializer(serializers.Serializer):
+    username=serializers.CharField(required=True,allow_blank=False)
+    password=serializers.CharField(style={'input_type': 'password'})
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=Profile
