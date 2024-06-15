@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from decouple import config
+from pocket.views import home
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path,include
@@ -30,7 +31,7 @@ URL_HEADER="portfolio-api/v{}".format(settings.VERSION.split('.')[0])
 
 urlpatterns = [
     path(ADMIN_SITE_URL, admin.site.urls),
-	path("",include("pocket.urls")),
+	path("",home,name="home"),
     path(f"{URL_HEADER}/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(f"{URL_HEADER}/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     # user endpoints
