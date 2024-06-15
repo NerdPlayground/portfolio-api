@@ -1,6 +1,10 @@
 from django.urls import reverse
 from datetime import date,datetime
+from django.http import HttpResponsePermanentRedirect
 from allauth.account.adapter import DefaultAccountAdapter
+
+def home(request):
+    return HttpResponsePermanentRedirect(reverse("swagger-ui"))
     
 def get_date_object(date_string):
     date_format="%Y-%m-%d"
