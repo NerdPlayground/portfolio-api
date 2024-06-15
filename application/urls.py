@@ -20,9 +20,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path,include
 from django.urls.conf import re_path
-from knox import views as knox_views
-from profiles.views import CurrentUser,LoginView
 from allauth.account.views import ConfirmEmailView
+from profiles.views import CurrentUser,LoginView,LogoutView,LogoutAllView
 from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
 
 admin.site.site_header="Portfolio API Administration"
@@ -37,8 +36,8 @@ urlpatterns = [
     # user endpoints
     path(f"{URL_HEADER}/user/",CurrentUser.as_view(),name="current-user"),
     path(f"{URL_HEADER}/login/", LoginView.as_view(), name='knox_login'),
-    path(f"{URL_HEADER}/logout/", knox_views.LogoutView.as_view(), name='knox_logout'),
-    path(f"{URL_HEADER}/logout/all/", knox_views.LogoutAllView.as_view(), name='knox_logout_all'),
+    path(f"{URL_HEADER}/logout/", LogoutView.as_view(), name='knox_logout'),
+    path(f"{URL_HEADER}/logout/all/", LogoutAllView.as_view(), name='knox_logout_all'),
     # password/reset/, password/reset/confirm/, password/reset/validate_token/
     path(f"{URL_HEADER}/password/reset/", include('django_rest_passwordreset.urls', namespace='password_reset')),
     # password/change/
