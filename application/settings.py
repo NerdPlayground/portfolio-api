@@ -211,7 +211,9 @@ AUTHENTICATION_BACKENDS = [
 # Authentication and Verification
 
 ACCOUNT_EMAIL_REQUIRED = True
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
 ACCOUNT_ADAPTER = 'pocket.views.PortfolioAPIAccountAdapter'
 
 
@@ -233,8 +235,28 @@ VERSION="1.0.0"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Personal Portfolio API",
-    "DESCRIPTION": "Interface for both the portfolio and portfolio manager",
+    "DESCRIPTION": "<p>A database interface for both your portfolio and portfolio manager. \
+        The portfolio manager allows you to perform read and write operations<br/>\
+        to keep your information up-to-date, allowing your portfolio to display all \
+        your relevant information.</p>\
+        <h2>Let's Get Started</h2>\
+        <ol>\
+        <li>Register your account</li>\
+        <li>Check your inbox to verify your email</li>\
+        <li>Login with your valid credentials</li>\
+        <li>In the authorize tab, submit the token supplied after logging in</li>\
+        </ol>\
+        <p>Once you are finished, logout from the Logout endpoint to invalidate the token,\
+        then logout from the Authorize tab to discard the token from swagger ui.<br/>\
+        Simply logging out from the Authorize tab doesn't invalidate the token and it can\
+        still be used to access your information</p>\
+        <p><strong>NOTE:</strong> Swagger doesn't persist authorization details on page reload.\
+        Therefore, save your token to resubmit it in case you accidentally reload the page.</p>",
     "VERSION": VERSION,
+    "CONTACT":{
+        "name":"George Mobisa",
+        "email":"georgemobisa23@outlook.com",
+    },
 }
 
 
