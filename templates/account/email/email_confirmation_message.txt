@@ -4,5 +4,6 @@
 {% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
 You're receiving this email because user {{ user_display }} has given your email address to register an account on {{ site_domain }}.
 To confirm this is correct, go to {{ verification_url }}
-and use the following token: {{ key }}
+and submit the following key: {{ key }}
+NOTE: The key expires after {{ expires_after }} days
 {% endblocktrans %}{% endautoescape %}{% endblock content %}
