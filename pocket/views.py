@@ -55,7 +55,7 @@ class PortfolioAPIAccountAdapter(DefaultAccountAdapter):
 
         confirm_email_url=reverse("account_confirm_email",kwargs={"key":context.get("key")})
         base_url=context.get("activate_url").split(confirm_email_url)[0]
-        verification_url=f'{base_url}/{reverse("rest_verify_email")}'
+        verification_url=f'{base_url}{reverse("rest_verify_email")}'
         ctx={"verification_url":verification_url}
         ctx.update(context)
         return super().send_mail(template_prefix, email, ctx)
