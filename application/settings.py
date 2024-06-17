@@ -216,6 +216,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 ACCOUNT_ADAPTER = 'pocket.views.PortfolioAPIAccountAdapter'
 
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+
 
 # Email Configuration
 

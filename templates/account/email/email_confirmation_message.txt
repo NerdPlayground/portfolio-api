@@ -5,4 +5,5 @@
 You're receiving this email because user {{ user_display }} has given your email address to register an account on {{ site_domain }}.
 To confirm this is correct, go to {{ verification_url }}
 and submit the following key: {{ key }}
+NOTE: The key expires after {{ expires_after }} days
 {% endblocktrans %}{% endautoescape %}{% endblock content %}
