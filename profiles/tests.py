@@ -29,7 +29,7 @@ class ProfilesTestCase(PocketTestCase):
         super().setUpTestData()
     
     def verify_user_email(self,username):
-        pattern="token: (?P<key>[-:\w]+)"
+        pattern="key: (?P<key>[-:\w]+)"
         key=re.search(pattern,mail.outbox[0].body).group("key")
         response=self.client.post(reverse("rest_verify_email"),{"key":key})
         self.assertEqual(response.status_code,200)
