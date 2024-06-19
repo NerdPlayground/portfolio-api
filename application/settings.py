@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import dj_database_url
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+from urllib.parse import quote
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -99,30 +101,29 @@ WSGI_APPLICATION = 'application.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config("NAME"),
-            'USER': config("USER"),
-            'PASSWORD': config("PASSWORD"),
-            'HOST': config("HOST"),
-            'PORT': config("PORT"),
-        }
-    }
-else:
-    # Update database configuration from $DATABASE_URL.
-    import dj_database_url
+# Generate the postgres url in local environment
+# Use the DATABASE_URL .env variable in production environment
+# Quote to ensure special characters are urlencoded
 
-    # conn_max_age makes the connection persistent rather
-    # than recreating it every request cycle
-    DATABASES = {
-        'default': dj_database_url.parse(
-            config("DATABASE_URL"),
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
+DATABASE_URL=(
+    "postgres://{}:{}@{}:{}/{}".format(
+        quote(config("USER")),quote(config("PASSWORD")),
+        config("HOST"),config("PORT"),quote(config("NAME"))
+    )
+    if DEBUG 
+    else config("DATABASE_URL")
+)
+
+# conn_max_age makes the connection persistent rather
+# than recreating it every request cycle
+
+DATABASES = {
+    'default': dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
 
 
 # Password validation
