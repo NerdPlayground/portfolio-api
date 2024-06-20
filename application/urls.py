@@ -21,8 +21,8 @@ from django.contrib import admin
 from django.urls import path,include
 from django.urls.conf import re_path
 from allauth.account.views import ConfirmEmailView
-from profiles.views import CurrentUser,LoginView,LogoutView,LogoutAllView
 from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
+from profiles.views import contact_user,CurrentUser,LoginView,LogoutView,LogoutAllView
 
 admin.site.site_header="Portfolio API Administration"
 ADMIN_SITE_URL="{}/".format(config('ADMIN_SITE_URL'))
@@ -35,6 +35,7 @@ urlpatterns = [
     path(f"{URL_HEADER}/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     # user endpoints
     path(f"{URL_HEADER}/user/",CurrentUser.as_view(),name="current-user"),
+    path(f"{URL_HEADER}/contact-user/",contact_user,name="contact-user"),
     path(f"{URL_HEADER}/login/", LoginView.as_view(), name='knox_login'),
     path(f"{URL_HEADER}/logout/", LogoutView.as_view(), name='knox_logout'),
     path(f"{URL_HEADER}/logout/all/", LogoutAllView.as_view(), name='knox_logout_all'),

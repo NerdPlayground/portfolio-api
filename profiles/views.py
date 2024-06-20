@@ -1,14 +1,21 @@
+import smtplib
 from .permissions import *
+from django.conf import settings
+from django.core.mail import EmailMessage
 from drf_spectacular.utils import extend_schema
-from rest_framework import generics,permissions
 from django.contrib.auth import login,get_user_model
 from .serializers import UserSerializer,LoginSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view,schema
+from rest_framework import generics,permissions,status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import (
     LoginView as KnoxLoginView,
     LogoutView as KnoxLogoutView,
     LogoutAllView as KnoxLogoutAllView,
 )
+
+from django.contrib.auth.models import User
 
 class UserList(generics.ListAPIView):
     queryset=get_user_model().objects.all()
@@ -102,3 +109,37 @@ class LogoutAllView(KnoxLogoutAllView):
     )
     def post(self, request, format=None):
         return super().post(request,format)
+
+@api_view(["POST"])
+@schema(None)
+def contact_user(request):
+    try:
+        name=request.data.get("name")
+        message=request.data.get("message")
+        sender=request.data.get("sender")
+        receiver=request.data.get("receiver")
+
+        email=EmailMessage(
+            subject=f"Message from {name}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[receiver],body=message,reply_to=[sender]
+        )
+        result=email.send()
+
+        if result: return Response(
+            status=status.HTTP_200_OK,
+            data={"message":"Your message has been sent"}
+        )
+        else: return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={"message":"Your message has not been sent"}
+        )
+
+    except smtplib.SMTPException as exception:
+        return Response(
+            data={
+                "exception_thrown":exception,
+                "message":"An unexpected error has occured",
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
