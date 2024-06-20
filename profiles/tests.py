@@ -218,3 +218,40 @@ class ProfilesTestCase(PocketTestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code,200)
+    
+    def test_send_mail(self):
+        data={
+            "name":self.member.user.get_full_name(),
+            "sender":self.member.user.email,
+            "receiver":self.other_member.user.email,
+            "message":"Hello there",
+        }
+        response=self.client.post(
+            data=data,
+            path=reverse("contact-user"),
+        )
+        self.assertEqual(response.status_code,200)
+    
+    def test_send_mail_no_receiver(self):
+        data={
+            "name":self.member.user.get_full_name(),
+            "sender":self.member.user.email,
+            "message":"Hello there",
+        }
+        response=self.client.post(
+            data=data,
+            path=reverse("contact-user"),
+        )
+        self.assertEqual(response.status_code,400)
+    
+    def test_send_mail_no_sender(self):
+        data={
+            "name":self.member.user.get_full_name(),
+            "receiver":self.other_member.user.email,
+            "message":"Hello there",
+        }
+        response=self.client.post(
+            data=data,
+            path=reverse("contact-user"),
+        )
+        self.assertEqual(response.status_code,200)
