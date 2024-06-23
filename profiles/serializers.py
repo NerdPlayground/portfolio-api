@@ -6,6 +6,12 @@ class LoginSerializer(serializers.Serializer):
     username=serializers.CharField(required=True,allow_blank=False)
     password=serializers.CharField(style={'input_type': 'password'})
 
+class ContactUserSerializer(serializers.Serializer):
+    name=serializers.CharField(required=True,allow_blank=False)
+    sender=serializers.EmailField(required=True,allow_blank=False)
+    receiver=serializers.EmailField(required=True,allow_blank=False)
+    message=serializers.CharField(required=True,allow_blank=False)
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=Profile
