@@ -140,7 +140,7 @@ class ContactUser(APIView):
                 data={"message":"Your message has been sent"}
             )
             else: return Response(
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 data={"message":"Your message has not been sent"}
             )
         
@@ -150,5 +150,5 @@ class ContactUser(APIView):
                     "exception_thrown":exception,
                     "message":"An unexpected error has occured",
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
