@@ -265,10 +265,7 @@ SPECTACULAR_SETTINGS = {
 
 # External API Interaction
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "https://portfolio-api-vwdg.onrender.com",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://portfolio-api-vwdg.onrender.com",
