@@ -20,9 +20,9 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         reset_password_token.key
     )
     send_mail(
-        "Password Reset for {}".format(recipient), # title
-        email_plaintext_message, # message
-        "info@yourcompany.com", # sender
-        [reset_password_token.user.email], # receiver
+        subject="Password Reset for {}".format(recipient),
+        message=email_plaintext_message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[reset_password_token.user.email],
         fail_silently=False,
     )
