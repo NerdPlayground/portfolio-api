@@ -219,6 +219,38 @@ class ProfilesTestCase(PocketTestCase):
         )
         self.assertEqual(response.status_code,200)
     
+    def test_public_access_users_projects(self):
+        response=self.client.get(
+            path=reverse("user-projects",kwargs={"username":self.member.user.username}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code,200)
+        projects=[project for project in self.member_projects if project.display]
+        self.assertEqual(len(response.json()),len(projects))
+    
+    def test_public_access_non_existent_users_projects(self):
+        response=self.client.get(
+            path=reverse("user-projects",kwargs={"username":"no_such_user"}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code,404)
+    
+    def test_public_access_users_experiences(self):
+        response=self.client.get(
+            path=reverse("user-experiences",kwargs={"username":self.member.user.username}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code,200)
+        experiences=[experience for experience in self.member_experiences if experience.display]
+        self.assertEqual(len(response.json()),len(experiences))
+    
+    def test_public_access_non_existent_users_experiences(self):
+        response=self.client.get(
+            path=reverse("user-experiences",kwargs={"username":"no_such_user"}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code,404)
+    
     def test_send_mail(self):
         data={
             "name":self.member.user.get_full_name(),
