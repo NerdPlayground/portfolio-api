@@ -2,7 +2,7 @@ import smtplib
 from .permissions import *
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_list_or_404,get_object_or_404
 from drf_spectacular.utils import extend_schema
 from django.contrib.auth import login,get_user_model
 from rest_framework.views import APIView
@@ -63,8 +63,8 @@ class UserProjectList(generics.ListAPIView):
 
     def get_queryset(self):
         username=self.kwargs.get("username")
-        projects=get_list_or_404(Project,user__username=username)
-        projects=[project for project in projects if project.display]
+        get_object_or_404(get_user_model(),username=username)
+        projects=Project.objects.filter(user__username=username,display=True)
         return projects
 
 class UserExperienceList(generics.ListAPIView):
@@ -81,8 +81,8 @@ class UserExperienceList(generics.ListAPIView):
 
     def get_queryset(self):
         username=self.kwargs.get("username")
-        experiences=get_list_or_404(Experience,user__username=username)
-        experiences=[experience for experience in experiences if experience.display]
+        get_object_or_404(get_user_model(),username=username)
+        experiences=Experience.objects.filter(user__username=username,display=True)
         return experiences
 
 class CurrentUser(generics.RetrieveUpdateDestroyAPIView):
