@@ -2,6 +2,7 @@ import smtplib
 from .permissions import *
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django.shortcuts import get_list_or_404
 from drf_spectacular.utils import extend_schema
 from django.contrib.auth import login,get_user_model
 from rest_framework.views import APIView
@@ -9,6 +10,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view,schema
 from rest_framework import generics,permissions,status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+from projects.models import Project
+from projects.serializers import ProjectSerializer
+from experiences.models import Experience
+from experiences.serializers import ExperienceSerializer
 from .serializers import UserSerializer,LoginSerializer,ContactUserSerializer
 from knox.views import (
     LoginView as KnoxLoginView,
@@ -43,6 +48,42 @@ class UserDetail(generics.RetrieveAPIView):
         """
 
         return super().get(request, *args, **kwargs)
+
+class UserProjectList(generics.ListAPIView):
+    serializer_class=ProjectSerializer
+    permission_classes=[permissions.AllowAny]
+    
+    def get(self, request, *args, **kwargs):
+        """
+        Lists all the given user's displayable projects.
+        Accessible to both unauthenticated and authenticated users.
+        """
+
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        username=self.kwargs.get("username")
+        projects=get_list_or_404(Project,user__username=username)
+        projects=[project for project in projects if project.display]
+        return projects
+
+class UserExperienceList(generics.ListAPIView):
+    serializer_class=ExperienceSerializer
+    permission_classes=[permissions.AllowAny]
+    
+    def get(self, request, *args, **kwargs):
+        """
+        Lists all the given user's displayable experiences.
+        Accessible to both unauthenticated and authenticated users
+        """
+
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        username=self.kwargs.get("username")
+        experiences=get_list_or_404(Experience,user__username=username)
+        experiences=[experience for experience in experiences if experience.display]
+        return experiences
 
 class CurrentUser(generics.RetrieveUpdateDestroyAPIView):
     serializer_class=UserSerializer

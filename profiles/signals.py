@@ -14,13 +14,18 @@ def create_user_profile(sender,instance,created,**kwargs):
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+    # get the recipient name or usernamae
     recipient="{} {}".format(reset_password_token.user.first_name,reset_password_token.user.last_name)
+    if recipient=="": recipient=reset_password_token.user.username
+
+    # create the password reset message
     email_plaintext_message="Open the link to reset your password:\nLink: {}\nAuthentication Token: {}".format(
         instance.request.build_absolute_uri(reverse('password_reset:reset-password-confirm')),
         reset_password_token.key
     )
+
     send_mail(
-        subject="Password Reset for {}".format(recipient),
+        subject=f"Password Reset for {recipient}",
         message=email_plaintext_message,
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[reset_password_token.user.email],
