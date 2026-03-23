@@ -100,26 +100,12 @@ WSGI_APPLICATION = 'application.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-# Generate the postgres url in local environment
-# Use the DATABASE_URL .env variable in production environment
-# Quote to ensure special characters are urlencoded
-
-DATABASE_URL=(
-    "postgres://{}:{}@{}:{}/{}".format(
-        quote(config("USER")),quote(config("PASSWORD")),
-        config("HOST"),config("PORT"),quote(config("NAME"))
-    )
-    if DEBUG 
-    else config("DATABASE_URL")
-)
-
 # conn_max_age makes the connection persistent rather
 # than recreating it every request cycle
 
 DATABASES = {
     'default': dj_database_url.parse(
-        DATABASE_URL,
+        config("DATABASE_URL"),
         conn_max_age=600,
         conn_health_checks=True,
     )
