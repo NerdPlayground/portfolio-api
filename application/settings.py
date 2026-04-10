@@ -32,6 +32,8 @@ DEBUG = config('DEBUG',True,cast=bool)
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'portfolio-api-vwdg.onrender.com',
+    'georgemobisa.alwaysdata.net',
+    'theboarsin.alwaysdata.net',
 ]
 
 
@@ -255,4 +257,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://portfolio-api-vwdg.onrender.com",
+    "https://georgemobisa.alwaysdata.net/",
+    "https://theboarsin.alwaysdata.net/",
 ]
