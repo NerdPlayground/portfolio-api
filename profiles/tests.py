@@ -23,13 +23,27 @@ TESTED ENDPOINTS:
 UNTESTED ENDPOINTS:
 '''
 
+USER_DETAILS={
+    "first_name":"George",
+    "last_name":"Mobisa",
+    "profile":{
+        "bio": "Profile bio",
+        "skills": ["skill-01","skill-02","skill-03"],
+        "socials": {
+            "social-01":"http://127.0.0.1:8000/",
+            "social-02":"http://127.0.0.1:8000/",
+            "social-03":"http://127.0.0.1:8000/"
+        }
+    }
+}
+
 class ProfilesTestCase(PocketTestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
     
     def verify_user_email(self,username):
-        pattern="key: (?P<key>[-:\w]+)"
+        pattern=r"key: (?P<key>[-:\w]+)"
         key=re.search(pattern,mail.outbox[0].body).group("key")
         response=self.client.post(reverse("rest_verify_email"),{"key":key})
         self.assertEqual(response.status_code,200)
@@ -38,7 +52,7 @@ class ProfilesTestCase(PocketTestCase):
         email_address=EmailAddress.objects.get(user=current_user)
         self.assertTrue(email_address.verified)
 
-    def setup_profile_details(self,token,username,email,details):
+    def setup_profile_details(self,token,username,email,details,status_code=200):
         response=self.client.put(
             headers={"Authorization": f"Bearer {token}"},
             path=reverse("current-user"),
@@ -50,7 +64,7 @@ class ProfilesTestCase(PocketTestCase):
                 'profile':details.get('profile'),
             }
         )
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code,status_code)
 
     def test_member_registration(self):
         username="dorobu"
@@ -67,30 +81,23 @@ class ProfilesTestCase(PocketTestCase):
 
         profile=Profile.objects.last()
         token=self.member_login(profile,self.password)
-        details={
-            "first_name":"George",
-            "last_name":"Mobisa",
-            "profile":{
-                "bio": "Profile bio",
-                "skills": ["skill-01","skill-02","skill-03"],
-                "socials": {
-                    "social-01":"http://127.0.0.1:8000/",
-                    "social-02":"http://127.0.0.1:8000/",
-                    "social-03":"http://127.0.0.1:8000/"
-                }
-            }
-        }
-        self.setup_profile_details(token,username,email,details)
+        self.setup_profile_details(token,username,email,USER_DETAILS)
 
         profile=Profile.objects.last()
         self.assertEqual(profile.user.username,username)
         self.assertEqual(profile.user.email,email)
-        self.assertEqual(profile.user.first_name,details.get('first_name'))
-        self.assertEqual(profile.user.last_name,details.get('last_name'))
-        self.assertEqual(profile.bio,details.get('profile').get('bio'))
-        self.assertEqual(profile.skills,details.get('profile').get('skills'))
-        self.assertEqual(profile.socials,details.get('profile').get('socials'))
+        self.assertEqual(profile.user.first_name,USER_DETAILS.get('first_name'))
+        self.assertEqual(profile.user.last_name,USER_DETAILS.get('last_name'))
+        self.assertEqual(profile.bio,USER_DETAILS.get('profile').get('bio'))
+        self.assertEqual(profile.skills,USER_DETAILS.get('profile').get('skills'))
+        self.assertEqual(profile.socials,USER_DETAILS.get('profile').get('socials'))
 
+    def test_other_member_update_to_exisiting_username(self):
+        token=self.member_login(self.other_member)
+        username=self.member.user.username
+        email=self.other_member.user.email
+        self.setup_profile_details(token,username,email,USER_DETAILS,400)
+    
     def test_member_delete_account(self):
         token=self.member_login(self.member)
         total_members=Profile.objects.count()
@@ -136,7 +143,7 @@ class ProfilesTestCase(PocketTestCase):
         self.assertEqual(response.status_code,200)
         self.assertEqual(len(mail.outbox),1)
 
-        pattern="Authentication Token: (?P<token>[\w]+)"
+        pattern=r"Authentication Token: (?P<token>[\w]+)"
         token=re.search(pattern,mail.outbox[0].body).group("token")
         token_response=self.client.post(
             path=reverse("password_reset:reset-password-validate"),
