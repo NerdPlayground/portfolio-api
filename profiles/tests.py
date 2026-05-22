@@ -29,7 +29,7 @@ class ProfilesTestCase(PocketTestCase):
         super().setUpTestData()
     
     def verify_user_email(self,username):
-        pattern="key: (?P<key>[-:\w]+)"
+        pattern=r"key: (?P<key>[-:\w]+)"
         key=re.search(pattern,mail.outbox[0].body).group("key")
         response=self.client.post(reverse("rest_verify_email"),{"key":key})
         self.assertEqual(response.status_code,200)
@@ -136,7 +136,7 @@ class ProfilesTestCase(PocketTestCase):
         self.assertEqual(response.status_code,200)
         self.assertEqual(len(mail.outbox),1)
 
-        pattern="Authentication Token: (?P<token>[\w]+)"
+        pattern=r"Authentication Token: (?P<token>[\w]+)"
         token=re.search(pattern,mail.outbox[0].body).group("token")
         token_response=self.client.post(
             path=reverse("password_reset:reset-password-validate"),
